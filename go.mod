@@ -1,3 +1,3 @@
-module go-sample/src
+module go.sample.com
 
 go 1.14

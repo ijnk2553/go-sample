@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"go.sample.com/interface/controller"
+)
 
 func main() {
-	fmt.Println("hello world")
+	out := "sss"
+	cont := new(controller.Controller)
+	output, err := cont.Run(out)
+	if err != nil {
+		fmt.Print(output)
+	}
+
 }
