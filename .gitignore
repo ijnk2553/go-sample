@@ -1,2 +1,4 @@
 .vscode/
 go.sample.com
+__debug_bin
+.DS_Store
