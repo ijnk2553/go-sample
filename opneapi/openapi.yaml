@@ -6,7 +6,7 @@ info:
     email: jjunary4471@gmail.com
   version: 1.0.0
 servers:
-- url: http://localhost/
+- url: http://localhost
   description: 로컬호스트
 tags:
 - name: daily
