@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  title: Transportation Cost Management API
+  description: 교통비 관리용 OPENAPI
+  contact:
+    email: jjunary4471@gmail.com
+  version: 1.0.0
+servers:
+- url: http://localhost
+  description: 로컬호스트
+tags:
+- name: daily
+  description: 일별교통비관리
+- name: monthly
+  description: 월별교통비관리
+paths:
+  /daily/register:
+    post:
+      tags:
+      - daily
+      summary: 일별 교통비 추가
+      description: |
+        일별 교통비를 추가하는 API
+      operationId: registerDailyFee
+      requestBody:
+        description: Inventory item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyFeeInfo'
+      responses:
+        "200":
+          description: 등록 결과 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DailyRegisterResponse'
+        "400":
+          description: 등록 결과 실패
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+  /daily/{registerNumber}:  
+    get:
+      tags:
+      - daily
+      summary: 일별 교통비 1건 검색
+      description: 교통비 등록번호에 해당하는 데이터 검색
+      operationId: searchDailyFee
+      parameters:
+      - in: path
+        name: registerNumber
+        description: pass an optional search string for looking up inventory
+        required: true
+        schema:
+          minimum: 8
+          maximum: 8
+          pattern: "^[0-9]+$"
+          type: string
+      responses:
+        "200":
+          description: 검색 결과 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DailyFeeInfo'
+        "400":
+          description: 검색 결과 실패
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    DailyFeeInfo:
+      required:
+      - userId
+      - date
+      - start
+      - destination
+      - fee
+      type: object
+      properties:
+        userId:
+          description: "유저 아이디"
+          type: string
+          minimum: 10
+          maximum: 10
+          pattern: "^[0-9A-Za-z]+$"
+          example: U000000001
+        date:
+          description: "입력 날짜"
+          type: string
+          minimum: 10
+          maximum: 10
+          format: date
+          pattern: "YYYY-MM-DD"
+          example: "2020-09-13"
+        startPoint:
+          description: "출발 지점"
+          type: string
+          example: 渋谷
+        destination:
+          description: "목적지"
+          type: string
+          example: 新宿
+        reason:
+          type: string
+          example: 現場
+        fee:
+          description: "요금"
+          type: integer
+          format: int32
+          example: 1000
+    DailyRegisterResponse:
+      type: object
+      properties:
+        userId:
+          description: "유저 아이디"
+          type: string
+          example: U000000001
+        date:
+          description: "입력 날짜"
+          type: string
+          example: "2020-09-13"
+        registerNumber:
+          description: "교통비 등록번호"
+          example: "00000001"
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          description: "에러 코드"
+          type: string
+          example: "E00001"
+        errorMessage:
+          description: "에러 메세지"
+          type: string
+          example: "입력형식이 잘못되었습니다[userId]"
